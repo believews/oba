@@ -1,1 +1,2 @@
+Git is free softwar.
 i am learnning git now
