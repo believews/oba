@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.ProductMybatisDao">
+
+	<resultMap id="RM_Product" type="com.oba.entity.Product">
+        <result property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="picUrl" column="pic_url"/>
+        <result property="price" column="price"/>
+        <result property="sales" column="sales"/>
+        <result property="serviceTime" column="service_time"/>
+        <result property="shelfLife" column="shelf_life"/>
+        <result property="recommendIndex" column="recommend_index"/>
+        <result property="productIntroduce" column="product_introduce"/>
+        <result property="productDetail" column="product_detail"/>
+        <result property="createTime" column="create_time"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Product_columns">
+		id,product_id,product_name,pic_url,price,sales,service_time,shelf_life,recommend_index,product_introduce,product_detail,create_time
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO product (
+        	id ,
+        	product_id ,
+        	product_name ,
+        	pic_url ,
+        	price ,
+        	sales ,
+        	service_time ,
+        	shelf_life ,
+        	recommend_index ,
+        	product_introduce ,
+        	product_detail ,
+        	create_time 
+        ) VALUES (	
+        	#{id} ,
+        	#{productId} ,
+        	#{productName} ,
+        	#{picUrl} ,
+        	#{price} ,
+        	#{sales} ,
+        	#{serviceTime} ,
+        	#{shelfLife} ,
+        	#{recommendIndex} ,
+        	#{productIntroduce} ,
+        	#{productDetail} ,
+        	#{createTime} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE product 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(productId)">product_id = #{productId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(productName)">product_name = #{productName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(picUrl)">pic_url = #{picUrl} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(price)">price = #{price} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(sales)">sales = #{sales} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceTime)">service_time = #{serviceTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(shelfLife)">shelf_life = #{shelfLife} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(recommendIndex)">recommend_index = #{recommendIndex} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(productIntroduce)">product_introduce = #{productIntroduce} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(productDetail)">product_detail = #{productDetail} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM product WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  product  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_Product">
+		SELECT <include refid="Product_columns" />
+		FROM product WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM product 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_Product">
+        SELECT <include refid="Product_columns" /> 
+		FROM product 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="Product_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(productId)">
+				AND product_id = #{productId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(productName)">
+				AND product_name = #{productName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(picUrl)">
+				AND pic_url = #{picUrl}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(price)">
+				AND price = #{price}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(sales)">
+				AND sales = #{sales}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceTime)">
+				AND service_time = #{serviceTime}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shelfLife)">
+				AND shelf_life = #{shelfLife}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(recommendIndex)">
+				AND recommend_index = #{recommendIndex}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(productIntroduce)">
+				AND product_introduce = #{productIntroduce}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(productDetail)">
+				AND product_detail = #{productDetail}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM product 
+		<include refid="Product_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_Product">
+    	SELECT <include refid="Product_columns" />
+	    FROM product 
+		<include refid="Product_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

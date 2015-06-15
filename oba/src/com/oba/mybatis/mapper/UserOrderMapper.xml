@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.UserOrderMybatisDao">
+
+	<resultMap id="RM_UserOrder" type="com.oba.entity.UserOrder">
+        <result property="id" column="id"/>
+        <result property="orderSeq" column="order_seq"/>
+        <result property="source" column="source"/>
+        <result property="city" column="city"/>
+        <result property="payType" column="pay_type"/>
+        <result property="shouldPay" column="should_pay"/>
+        <result property="realPay" column="real_pay"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="addressId" column="address_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="address" column="address"/>
+        <result property="artisanId" column="artisan_id"/>
+        <result property="status" column="status"/>
+        <result property="ifChoose" column="if_choose"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="reserveTime" column="reserve_time"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="artisanStatus" column="artisan_status"/>
+        <result property="artisanConfirmTime" column="artisan_confirm_time"/>
+        <result property="customConfirmTime" column="custom_confirm_time"/>
+        <result property="refundTime" column="refund_time"/>
+        <result property="refundMoney" column="refund_money"/>
+        <result property="remark" column="remark"/>
+        <result property="type" column="type"/>
+        <result property="createId" column="create_id"/>
+        <result property="orderType" column="order_type"/>
+        <result property="servicePay" column="service_pay"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="UserOrder_columns">
+		id,order_seq,source,city,pay_type,should_pay,real_pay,user_id,product_id,address_id,mobile,address,artisan_id,status,if_choose,pay_status,coupon_id,create_time,reserve_time,pay_time,artisan_status,artisan_confirm_time,custom_confirm_time,refund_time,refund_money,remark,type,create_id,order_type,service_pay
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO user_order (
+        	id ,
+        	order_seq ,
+        	source ,
+        	city ,
+        	pay_type ,
+        	should_pay ,
+        	real_pay ,
+        	user_id ,
+        	product_id ,
+        	address_id ,
+        	mobile ,
+        	address ,
+        	artisan_id ,
+        	status ,
+        	if_choose ,
+        	pay_status ,
+        	coupon_id ,
+        	create_time ,
+        	reserve_time ,
+        	pay_time ,
+        	artisan_status ,
+        	artisan_confirm_time ,
+        	custom_confirm_time ,
+        	refund_time ,
+        	refund_money ,
+        	remark ,
+        	type ,
+        	create_id ,
+        	order_type ,
+        	service_pay 
+        ) VALUES (	
+        	#{id} ,
+        	#{orderSeq} ,
+        	#{source} ,
+        	#{city} ,
+        	#{payType} ,
+        	#{shouldPay} ,
+        	#{realPay} ,
+        	#{userId} ,
+        	#{productId} ,
+        	#{addressId} ,
+        	#{mobile} ,
+        	#{address} ,
+        	#{artisanId} ,
+        	#{status} ,
+        	#{ifChoose} ,
+        	#{payStatus} ,
+        	#{couponId} ,
+        	#{createTime} ,
+        	#{reserveTime} ,
+        	#{payTime} ,
+        	#{artisanStatus} ,
+        	#{artisanConfirmTime} ,
+        	#{customConfirmTime} ,
+        	#{refundTime} ,
+        	#{refundMoney} ,
+        	#{remark} ,
+        	#{type} ,
+        	#{createId} ,
+        	#{orderType} ,
+        	#{servicePay} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE user_order 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(orderSeq)">order_seq = #{orderSeq} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(source)">source = #{source} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">city = #{city} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(payType)">pay_type = #{payType} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(shouldPay)">should_pay = #{shouldPay} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(realPay)">real_pay = #{realPay} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">user_id = #{userId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(productId)">product_id = #{productId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(addressId)">address_id = #{addressId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">mobile = #{mobile} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">address = #{address} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanId)">artisan_id = #{artisanId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">status = #{status} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(ifChoose)">if_choose = #{ifChoose} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(payStatus)">pay_status = #{payStatus} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(couponId)">coupon_id = #{couponId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(reserveTime)">reserve_time = #{reserveTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(payTime)">pay_time = #{payTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanStatus)">artisan_status = #{artisanStatus} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanConfirmTime)">artisan_confirm_time = #{artisanConfirmTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(customConfirmTime)">custom_confirm_time = #{customConfirmTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(refundTime)">refund_time = #{refundTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(refundMoney)">refund_money = #{refundMoney} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">remark = #{remark} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(type)">type = #{type} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createId)">create_id = #{createId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(orderType)">order_type = #{orderType} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(servicePay)">service_pay = #{servicePay} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM user_order WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  user_order  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_UserOrder">
+		SELECT <include refid="UserOrder_columns" />
+		FROM user_order WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM user_order 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_UserOrder">
+        SELECT <include refid="UserOrder_columns" /> 
+		FROM user_order 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="UserOrder_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(orderSeq)">
+				AND order_seq = #{orderSeq}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(source)">
+				AND source = #{source}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">
+				AND city = #{city}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(payType)">
+				AND pay_type = #{payType}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shouldPay)">
+				AND should_pay = #{shouldPay}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(realPay)">
+				AND real_pay = #{realPay}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">
+				AND user_id = #{userId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(productId)">
+				AND product_id = #{productId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(addressId)">
+				AND address_id = #{addressId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">
+				AND mobile = #{mobile}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">
+				AND address = #{address}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanId)">
+				AND artisan_id = #{artisanId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">
+				AND status = #{status}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(ifChoose)">
+				AND if_choose = #{ifChoose}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(payStatus)">
+				AND pay_status = #{payStatus}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(couponId)">
+				AND coupon_id = #{couponId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(reserveTimeBegin)">
+				AND reserve_time >= #{reserveTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(reserveTimeEnd)">
+				AND reserve_time &lt;= #{reserveTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(payTimeBegin)">
+				AND pay_time >= #{payTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(payTimeEnd)">
+				AND pay_time &lt;= #{payTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanStatus)">
+				AND artisan_status = #{artisanStatus}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanConfirmTimeBegin)">
+				AND artisan_confirm_time >= #{artisanConfirmTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(artisanConfirmTimeEnd)">
+				AND artisan_confirm_time &lt;= #{artisanConfirmTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(customConfirmTimeBegin)">
+				AND custom_confirm_time >= #{customConfirmTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(customConfirmTimeEnd)">
+				AND custom_confirm_time &lt;= #{customConfirmTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(refundTimeBegin)">
+				AND refund_time >= #{refundTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(refundTimeEnd)">
+				AND refund_time &lt;= #{refundTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(refundMoney)">
+				AND refund_money = #{refundMoney}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">
+				AND remark = #{remark}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(type)">
+				AND type = #{type}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createId)">
+				AND create_id = #{createId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(orderType)">
+				AND order_type = #{orderType}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(servicePay)">
+				AND service_pay = #{servicePay}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM user_order 
+		<include refid="UserOrder_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_UserOrder">
+    	SELECT <include refid="UserOrder_columns" />
+	    FROM user_order 
+		<include refid="UserOrder_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.ShopCategoryMybatisDao">
+
+	<resultMap id="RM_ShopCategory" type="com.oba.entity.ShopCategory">
+        <result property="id" column="id"/>
+        <result property="shopId" column="shop_id"/>
+        <result property="categorylv2Id" column="categorylv2_id"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ShopCategory_columns">
+		id,shop_id,categorylv2_id
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO shop_category (
+        	id ,
+        	shop_id ,
+        	categorylv2_id 
+        ) VALUES (	
+        	#{id} ,
+        	#{shopId} ,
+        	#{categorylv2Id} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE shop_category 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(shopId)">shop_id = #{shopId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(categorylv2Id)">categorylv2_id = #{categorylv2Id} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM shop_category WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  shop_category  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_ShopCategory">
+		SELECT <include refid="ShopCategory_columns" />
+		FROM shop_category WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM shop_category 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_ShopCategory">
+        SELECT <include refid="ShopCategory_columns" /> 
+		FROM shop_category 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="ShopCategory_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shopId)">
+				AND shop_id = #{shopId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(categorylv2Id)">
+				AND categorylv2_id = #{categorylv2Id}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM shop_category 
+		<include refid="ShopCategory_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_ShopCategory">
+    	SELECT <include refid="ShopCategory_columns" />
+	    FROM shop_category 
+		<include refid="ShopCategory_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

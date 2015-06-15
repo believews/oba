@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.CommentPhotoMybatisDao">
+
+	<resultMap id="RM_CommentPhoto" type="com.oba.entity.CommentPhoto">
+        <result property="id" column="id"/>
+        <result property="commId" column="comm_id"/>
+        <result property="photo" column="photo"/>
+        <result property="createTime" column="create_time"/>
+        <result property="yesNum" column="yes_num"/>
+        <result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="CommentPhoto_columns">
+		id,comm_id,photo,create_time,yes_num,user_id
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO comment_photo (
+        	id ,
+        	comm_id ,
+        	photo ,
+        	create_time ,
+        	yes_num ,
+        	user_id 
+        ) VALUES (	
+        	#{id} ,
+        	#{commId} ,
+        	#{photo} ,
+        	#{createTime} ,
+        	#{yesNum} ,
+        	#{userId} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE comment_photo 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(commId)">comm_id = #{commId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(photo)">photo = #{photo} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(yesNum)">yes_num = #{yesNum} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">user_id = #{userId} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM comment_photo WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  comment_photo  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_CommentPhoto">
+		SELECT <include refid="CommentPhoto_columns" />
+		FROM comment_photo WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM comment_photo 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_CommentPhoto">
+        SELECT <include refid="CommentPhoto_columns" /> 
+		FROM comment_photo 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="CommentPhoto_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(commId)">
+				AND comm_id = #{commId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(photo)">
+				AND photo = #{photo}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(yesNum)">
+				AND yes_num = #{yesNum}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">
+				AND user_id = #{userId}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM comment_photo 
+		<include refid="CommentPhoto_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_CommentPhoto">
+    	SELECT <include refid="CommentPhoto_columns" />
+	    FROM comment_photo 
+		<include refid="CommentPhoto_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

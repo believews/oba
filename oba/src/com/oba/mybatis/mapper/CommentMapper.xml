@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.CommentMybatisDao">
+
+	<resultMap id="RM_Comment" type="com.oba.entity.Comment">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="shopId" column="shop_id"/>
+        <result property="contents" column="contents"/>
+        <result property="createTime" column="create_time"/>
+        <result property="star" column="star"/>
+        <result property="scoreSkill" column="score_skill"/>
+        <result property="scoreCommunication" column="score_communication"/>
+        <result property="scorePunctuality" column="score_punctuality"/>
+        <result property="orderSeq" column="order_seq"/>
+        <result property="praiseCount" column="praise_count"/>
+        <result property="punishmentCount" column="punishment_count"/>
+        <result property="isAvailability" column="is_availability"/>
+        <result property="isDel" column="is_del"/>
+        <result property="modifyCount" column="modify_count"/>
+        <result property="userIp" column="user_ip"/>
+        <result property="userFrom" column="user_from"/>
+        <result property="updateTime" column="update_time"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Comment_columns">
+		id,user_id,shop_id,contents,create_time,star,score_skill,score_communication,score_punctuality,order_seq,praise_count,punishment_count,is_availability,is_del,modify_count,user_ip,user_from,update_time
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO comment (
+        	id ,
+        	user_id ,
+        	shop_id ,
+        	contents ,
+        	create_time ,
+        	star ,
+        	score_skill ,
+        	score_communication ,
+        	score_punctuality ,
+        	order_seq ,
+        	praise_count ,
+        	punishment_count ,
+        	is_availability ,
+        	is_del ,
+        	modify_count ,
+        	user_ip ,
+        	user_from ,
+        	update_time 
+        ) VALUES (	
+        	#{id} ,
+        	#{userId} ,
+        	#{shopId} ,
+        	#{contents} ,
+        	#{createTime} ,
+        	#{star} ,
+        	#{scoreSkill} ,
+        	#{scoreCommunication} ,
+        	#{scorePunctuality} ,
+        	#{orderSeq} ,
+        	#{praiseCount} ,
+        	#{punishmentCount} ,
+        	#{isAvailability} ,
+        	#{isDel} ,
+        	#{modifyCount} ,
+        	#{userIp} ,
+        	#{userFrom} ,
+        	#{updateTime} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE comment 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">user_id = #{userId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(shopId)">shop_id = #{shopId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(contents)">contents = #{contents} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(star)">star = #{star} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreSkill)">score_skill = #{scoreSkill} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreCommunication)">score_communication = #{scoreCommunication} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scorePunctuality)">score_punctuality = #{scorePunctuality} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(orderSeq)">order_seq = #{orderSeq} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(praiseCount)">praise_count = #{praiseCount} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(punishmentCount)">punishment_count = #{punishmentCount} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isAvailability)">is_availability = #{isAvailability} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isDel)">is_del = #{isDel} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(modifyCount)">modify_count = #{modifyCount} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userIp)">user_ip = #{userIp} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userFrom)">user_from = #{userFrom} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTime)">update_time = #{updateTime} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM comment WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  comment  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_Comment">
+		SELECT <include refid="Comment_columns" />
+		FROM comment WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM comment 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_Comment">
+        SELECT <include refid="Comment_columns" /> 
+		FROM comment 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="Comment_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">
+				AND user_id = #{userId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shopId)">
+				AND shop_id = #{shopId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(contents)">
+				AND contents = #{contents}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(star)">
+				AND star = #{star}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreSkill)">
+				AND score_skill = #{scoreSkill}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreCommunication)">
+				AND score_communication = #{scoreCommunication}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scorePunctuality)">
+				AND score_punctuality = #{scorePunctuality}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(orderSeq)">
+				AND order_seq = #{orderSeq}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(praiseCount)">
+				AND praise_count = #{praiseCount}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(punishmentCount)">
+				AND punishment_count = #{punishmentCount}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isAvailability)">
+				AND is_availability = #{isAvailability}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isDel)">
+				AND is_del = #{isDel}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(modifyCount)">
+				AND modify_count = #{modifyCount}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userIp)">
+				AND user_ip = #{userIp}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userFrom)">
+				AND user_from = #{userFrom}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeBegin)">
+				AND update_time >= #{updateTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeEnd)">
+				AND update_time &lt;= #{updateTimeEnd}
+		   </if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM comment 
+		<include refid="Comment_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_Comment">
+    	SELECT <include refid="Comment_columns" />
+	    FROM comment 
+		<include refid="Comment_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

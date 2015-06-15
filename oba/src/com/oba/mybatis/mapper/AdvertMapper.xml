@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.AdvertMybatisDao">
+
+	<resultMap id="RM_Advert" type="com.oba.entity.Advert">
+        <result property="adId" column="ad_id"/>
+        <result property="adCity" column="ad_city"/>
+        <result property="adUrl" column="ad_url"/>
+        <result property="adSort" column="ad_sort"/>
+        <result property="adLink" column="ad_link"/>
+        <result property="adType" column="ad_type"/>
+        <result property="adTitle" column="ad_title"/>
+        <result property="adSearch" column="ad_search"/>
+        <result property="adBegin" column="ad_begin"/>
+        <result property="adEnd" column="ad_end"/>
+        <result property="adRemark" column="ad_remark"/>
+        <result property="adUsed" column="ad_used"/>
+        <result property="adCreateTime" column="ad_create_time"/>
+        <result property="adVersion" column="ad_version"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Advert_columns">
+		ad_id,ad_city,ad_url,ad_sort,ad_link,ad_type,ad_title,ad_search,ad_begin,ad_end,ad_remark,ad_used,ad_create_time,ad_version
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO advert (
+        	ad_id ,
+        	ad_city ,
+        	ad_url ,
+        	ad_sort ,
+        	ad_link ,
+        	ad_type ,
+        	ad_title ,
+        	ad_search ,
+        	ad_begin ,
+        	ad_end ,
+        	ad_remark ,
+        	ad_used ,
+        	ad_create_time ,
+        	ad_version 
+        ) VALUES (	
+        	#{adId} ,
+        	#{adCity} ,
+        	#{adUrl} ,
+        	#{adSort} ,
+        	#{adLink} ,
+        	#{adType} ,
+        	#{adTitle} ,
+        	#{adSearch} ,
+        	#{adBegin} ,
+        	#{adEnd} ,
+        	#{adRemark} ,
+        	#{adUsed} ,
+        	#{adCreateTime} ,
+        	#{adVersion} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE advert 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adCity)">ad_city = #{adCity} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adUrl)">ad_url = #{adUrl} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adSort)">ad_sort = #{adSort} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adLink)">ad_link = #{adLink} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adType)">ad_type = #{adType} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adTitle)">ad_title = #{adTitle} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adSearch)">ad_search = #{adSearch} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adBegin)">ad_begin = #{adBegin} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adEnd)">ad_end = #{adEnd} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adRemark)">ad_remark = #{adRemark} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adUsed)">ad_used = #{adUsed} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adCreateTime)">ad_create_time = #{adCreateTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(adVersion)">ad_version = #{adVersion} </if>
+		</set>
+        WHERE 
+	        ad_id = #{adId} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM advert WHERE
+        ad_id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  advert  WHERE
+        ad_id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_Advert">
+		SELECT <include refid="Advert_columns" />
+		FROM advert WHERE 
+		ad_id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(ad_id) FROM advert 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_Advert">
+        SELECT <include refid="Advert_columns" /> 
+		FROM advert 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="Advert_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adId)">
+				AND ad_id = #{adId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adCity)">
+				AND ad_city = #{adCity}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adUrl)">
+				AND ad_url = #{adUrl}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adSort)">
+				AND ad_sort = #{adSort}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adLink)">
+				AND ad_link = #{adLink}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adType)">
+				AND ad_type = #{adType}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adTitle)">
+				AND ad_title = #{adTitle}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adSearch)">
+				AND ad_search = #{adSearch}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adBegin)">
+				AND ad_begin = #{adBegin}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adEnd)">
+				AND ad_end = #{adEnd}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adRemark)">
+				AND ad_remark = #{adRemark}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adUsed)">
+				AND ad_used = #{adUsed}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adCreateTimeBegin)">
+				AND ad_create_time >= #{adCreateTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(adCreateTimeEnd)">
+				AND ad_create_time &lt;= #{adCreateTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(adVersion)">
+				AND ad_version = #{adVersion}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(ad_id) FROM advert 
+		<include refid="Advert_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_Advert">
+    	SELECT <include refid="Advert_columns" />
+	    FROM advert 
+		<include refid="Advert_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

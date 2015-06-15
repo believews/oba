@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.UserAddressMybatisDao">
+
+	<resultMap id="RM_UserAddress" type="com.oba.entity.UserAddress">
+        <result property="id" column="id"/>
+        <result property="ifComm" column="if_comm"/>
+        <result property="customId" column="custom_id"/>
+        <result property="customName" column="custom_name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="town" column="town"/>
+        <result property="addressPoi" column="address_poi"/>
+        <result property="address" column="address"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="status" column="status"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="UserAddress_columns">
+		id,if_comm,custom_id,custom_name,mobile,province,city,town,address_poi,address,longitude,latitude,create_time,is_delete,status
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO user_address (
+        	id ,
+        	if_comm ,
+        	custom_id ,
+        	custom_name ,
+        	mobile ,
+        	province ,
+        	city ,
+        	town ,
+        	address_poi ,
+        	address ,
+        	longitude ,
+        	latitude ,
+        	create_time ,
+        	is_delete ,
+        	status 
+        ) VALUES (	
+        	#{id} ,
+        	#{ifComm} ,
+        	#{customId} ,
+        	#{customName} ,
+        	#{mobile} ,
+        	#{province} ,
+        	#{city} ,
+        	#{town} ,
+        	#{addressPoi} ,
+        	#{address} ,
+        	#{longitude} ,
+        	#{latitude} ,
+        	#{createTime} ,
+        	#{isDelete} ,
+        	#{status} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE user_address 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(ifComm)">if_comm = #{ifComm} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(customId)">custom_id = #{customId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(customName)">custom_name = #{customName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">mobile = #{mobile} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(province)">province = #{province} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">city = #{city} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(town)">town = #{town} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(addressPoi)">address_poi = #{addressPoi} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">address = #{address} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(longitude)">longitude = #{longitude} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(latitude)">latitude = #{latitude} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isDelete)">is_delete = #{isDelete} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">status = #{status} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM user_address WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  user_address  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_UserAddress">
+		SELECT <include refid="UserAddress_columns" />
+		FROM user_address WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM user_address 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_UserAddress">
+        SELECT <include refid="UserAddress_columns" /> 
+		FROM user_address 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="UserAddress_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(ifComm)">
+				AND if_comm = #{ifComm}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(customId)">
+				AND custom_id = #{customId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(customName)">
+				AND custom_name = #{customName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">
+				AND mobile = #{mobile}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(province)">
+				AND province = #{province}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">
+				AND city = #{city}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(town)">
+				AND town = #{town}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(addressPoi)">
+				AND address_poi = #{addressPoi}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">
+				AND address = #{address}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(longitude)">
+				AND longitude = #{longitude}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(latitude)">
+				AND latitude = #{latitude}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isDelete)">
+				AND is_delete = #{isDelete}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM user_address 
+		<include refid="UserAddress_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_UserAddress">
+    	SELECT <include refid="UserAddress_columns" />
+	    FROM user_address 
+		<include refid="UserAddress_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.ShopMybatisDao">
+
+	<resultMap id="RM_Shop" type="com.oba.entity.Shop">
+        <result property="shopId" column="shop_id"/>
+        <result property="contact" column="contact"/>
+        <result property="shopName" column="shop_name"/>
+        <result property="status" column="status"/>
+        <result property="avatar" column="avatar"/>
+        <result property="averagePrice" column="average_price"/>
+        <result property="serviceAmount" column="service_amount"/>
+        <result property="star" column="star"/>
+        <result property="scoreSkill" column="score_skill"/>
+        <result property="scoreCommunication" column="score_communication"/>
+        <result property="scorePunctuality" column="score_punctuality"/>
+        <result property="serviceContent" column="service_content"/>
+        <result property="des" column="des"/>
+        <result property="password" column="password"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="address" column="address"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="searchKey" column="search_key"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Shop_columns">
+		shop_id,contact,shop_name,status,avatar,average_price,service_amount,star,score_skill,score_communication,score_punctuality,service_content,des,password,comment_count,address,create_time,update_time,search_key,remark
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO shop (
+        	shop_id ,
+        	contact ,
+        	shop_name ,
+        	status ,
+        	avatar ,
+        	average_price ,
+        	service_amount ,
+        	star ,
+        	score_skill ,
+        	score_communication ,
+        	score_punctuality ,
+        	service_content ,
+        	des ,
+        	password ,
+        	comment_count ,
+        	address ,
+        	create_time ,
+        	update_time ,
+        	search_key ,
+        	remark 
+        ) VALUES (	
+        	#{shopId} ,
+        	#{contact} ,
+        	#{shopName} ,
+        	#{status} ,
+        	#{avatar} ,
+        	#{averagePrice} ,
+        	#{serviceAmount} ,
+        	#{star} ,
+        	#{scoreSkill} ,
+        	#{scoreCommunication} ,
+        	#{scorePunctuality} ,
+        	#{serviceContent} ,
+        	#{des} ,
+        	#{password} ,
+        	#{commentCount} ,
+        	#{address} ,
+        	#{createTime} ,
+        	#{updateTime} ,
+        	#{searchKey} ,
+        	#{remark} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE shop 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(contact)">contact = #{contact} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(shopName)">shop_name = #{shopName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">status = #{status} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(avatar)">avatar = #{avatar} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(averagePrice)">average_price = #{averagePrice} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceAmount)">service_amount = #{serviceAmount} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(star)">star = #{star} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreSkill)">score_skill = #{scoreSkill} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreCommunication)">score_communication = #{scoreCommunication} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(scorePunctuality)">score_punctuality = #{scorePunctuality} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceContent)">service_content = #{serviceContent} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(des)">des = #{des} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(password)">password = #{password} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(commentCount)">comment_count = #{commentCount} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">address = #{address} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTime)">update_time = #{updateTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(searchKey)">search_key = #{searchKey} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">remark = #{remark} </if>
+		</set>
+        WHERE 
+	        shop_id = #{shopId} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM shop WHERE
+        shop_id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  shop  WHERE
+        shop_id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_Shop">
+		SELECT <include refid="Shop_columns" />
+		FROM shop WHERE 
+		shop_id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(shop_id) FROM shop 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_Shop">
+        SELECT <include refid="Shop_columns" /> 
+		FROM shop 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="Shop_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shopId)">
+				AND shop_id = #{shopId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(contact)">
+				AND contact = #{contact}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(shopName)">
+				AND shop_name = #{shopName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">
+				AND status = #{status}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(avatar)">
+				AND avatar = #{avatar}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(averagePrice)">
+				AND average_price = #{averagePrice}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceAmount)">
+				AND service_amount = #{serviceAmount}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(star)">
+				AND star = #{star}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreSkill)">
+				AND score_skill = #{scoreSkill}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scoreCommunication)">
+				AND score_communication = #{scoreCommunication}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(scorePunctuality)">
+				AND score_punctuality = #{scorePunctuality}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(serviceContent)">
+				AND service_content = #{serviceContent}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(des)">
+				AND des = #{des}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(password)">
+				AND password = #{password}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(commentCount)">
+				AND comment_count = #{commentCount}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(address)">
+				AND address = #{address}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeBegin)">
+				AND update_time >= #{updateTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeEnd)">
+				AND update_time &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(searchKey)">
+				AND search_key = #{searchKey}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">
+				AND remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(shop_id) FROM shop 
+		<include refid="Shop_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_Shop">
+    	SELECT <include refid="Shop_columns" />
+	    FROM shop 
+		<include refid="Shop_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

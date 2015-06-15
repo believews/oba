@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.SmsSendListMybatisDao">
+
+	<resultMap id="RM_SmsSendList" type="com.oba.entity.SmsSendList">
+        <result property="id" column="id"/>
+        <result property="msgSeq" column="msg_seq"/>
+        <result property="busiType" column="busi_type"/>
+        <result property="mobile" column="mobile"/>
+        <result property="sendCode" column="send_code"/>
+        <result property="msg" column="msg"/>
+        <result property="beginTime" column="begin_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="isDeal" column="is_deal"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="isAvailability" column="is_availability"/>
+        <result property="isDel" column="is_del"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="SmsSendList_columns">
+		id,msg_seq,busi_type,mobile,send_code,msg,begin_time,end_time,is_deal,create_time,create_user_id,update_time,update_user_id,is_availability,is_del
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO sms_send_list (
+        	id ,
+        	msg_seq ,
+        	busi_type ,
+        	mobile ,
+        	send_code ,
+        	msg ,
+        	begin_time ,
+        	end_time ,
+        	is_deal ,
+        	create_time ,
+        	create_user_id ,
+        	update_time ,
+        	update_user_id ,
+        	is_availability ,
+        	is_del 
+        ) VALUES (	
+        	#{id} ,
+        	#{msgSeq} ,
+        	#{busiType} ,
+        	#{mobile} ,
+        	#{sendCode} ,
+        	#{msg} ,
+        	#{beginTime} ,
+        	#{endTime} ,
+        	#{isDeal} ,
+        	#{createTime} ,
+        	#{createUserId} ,
+        	#{updateTime} ,
+        	#{updateUserId} ,
+        	#{isAvailability} ,
+        	#{isDel} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE sms_send_list 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(msgSeq)">msg_seq = #{msgSeq} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(busiType)">busi_type = #{busiType} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">mobile = #{mobile} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(sendCode)">send_code = #{sendCode} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(msg)">msg = #{msg} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(beginTime)">begin_time = #{beginTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(endTime)">end_time = #{endTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isDeal)">is_deal = #{isDeal} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createUserId)">create_user_id = #{createUserId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTime)">update_time = #{updateTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(updateUserId)">update_user_id = #{updateUserId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isAvailability)">is_availability = #{isAvailability} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isDel)">is_del = #{isDel} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM sms_send_list WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  sms_send_list  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_SmsSendList">
+		SELECT <include refid="SmsSendList_columns" />
+		FROM sms_send_list WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM sms_send_list 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_SmsSendList">
+        SELECT <include refid="SmsSendList_columns" /> 
+		FROM sms_send_list 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="SmsSendList_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(msgSeq)">
+				AND msg_seq = #{msgSeq}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(busiType)">
+				AND busi_type = #{busiType}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(mobile)">
+				AND mobile = #{mobile}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(sendCode)">
+				AND send_code = #{sendCode}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(msg)">
+				AND msg = #{msg}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(beginTime)">
+				AND begin_time = #{beginTime}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(endTime)">
+				AND end_time = #{endTime}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isDeal)">
+				AND is_deal = #{isDeal}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createUserId)">
+				AND create_user_id = #{createUserId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeBegin)">
+				AND update_time >= #{updateTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateTimeEnd)">
+				AND update_time &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(updateUserId)">
+				AND update_user_id = #{updateUserId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isAvailability)">
+				AND is_availability = #{isAvailability}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isDel)">
+				AND is_del = #{isDel}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM sms_send_list 
+		<include refid="SmsSendList_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_SmsSendList">
+    	SELECT <include refid="SmsSendList_columns" />
+	    FROM sms_send_list 
+		<include refid="SmsSendList_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

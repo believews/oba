@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.CityMybatisDao">
+
+	<resultMap id="RM_City" type="com.oba.entity.City">
+        <result property="id" column="id"/>
+        <result property="cityCode" column="city_code"/>
+        <result property="cityName" column="city_name"/>
+        <result property="cityAreaCode" column="city_area_code"/>
+        <result property="cityPostCode" column="city_post_code"/>
+        <result property="cityLevel" column="city_level"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="enableStatus" column="enable_status"/>
+        <result property="other1" column="other_1"/>
+        <result property="other2" column="other_2"/>
+        <result property="other3" column="other_3"/>
+        <result property="other4" column="other_4"/>
+        <result property="other5" column="other_5"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="City_columns">
+		id,city_code,city_name,city_area_code,city_post_code,city_level,parent_code,enable_status,other_1,other_2,other_3,other_4,other_5
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO city (
+        	id ,
+        	city_code ,
+        	city_name ,
+        	city_area_code ,
+        	city_post_code ,
+        	city_level ,
+        	parent_code ,
+        	enable_status ,
+        	other_1 ,
+        	other_2 ,
+        	other_3 ,
+        	other_4 ,
+        	other_5 
+        ) VALUES (	
+        	#{id} ,
+        	#{cityCode} ,
+        	#{cityName} ,
+        	#{cityAreaCode} ,
+        	#{cityPostCode} ,
+        	#{cityLevel} ,
+        	#{parentCode} ,
+        	#{enableStatus} ,
+        	#{other1} ,
+        	#{other2} ,
+        	#{other3} ,
+        	#{other4} ,
+        	#{other5} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE city 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(cityCode)">city_code = #{cityCode} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(cityName)">city_name = #{cityName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(cityAreaCode)">city_area_code = #{cityAreaCode} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(cityPostCode)">city_post_code = #{cityPostCode} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(cityLevel)">city_level = #{cityLevel} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(parentCode)">parent_code = #{parentCode} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(enableStatus)">enable_status = #{enableStatus} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(other1)">other_1 = #{other1} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(other2)">other_2 = #{other2} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(other3)">other_3 = #{other3} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(other4)">other_4 = #{other4} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(other5)">other_5 = #{other5} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM city WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  city  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_City">
+		SELECT <include refid="City_columns" />
+		FROM city WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM city 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_City">
+        SELECT <include refid="City_columns" /> 
+		FROM city 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="City_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(cityCode)">
+				AND city_code = #{cityCode}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(cityName)">
+				AND city_name = #{cityName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(cityAreaCode)">
+				AND city_area_code = #{cityAreaCode}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(cityPostCode)">
+				AND city_post_code = #{cityPostCode}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(cityLevel)">
+				AND city_level = #{cityLevel}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(parentCode)">
+				AND parent_code = #{parentCode}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(enableStatus)">
+				AND enable_status = #{enableStatus}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(other1)">
+				AND other_1 = #{other1}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(other2)">
+				AND other_2 = #{other2}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(other3)">
+				AND other_3 = #{other3}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(other4)">
+				AND other_4 = #{other4}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(other5)">
+				AND other_5 = #{other5}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM city 
+		<include refid="City_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_City">
+    	SELECT <include refid="City_columns" />
+	    FROM city 
+		<include refid="City_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

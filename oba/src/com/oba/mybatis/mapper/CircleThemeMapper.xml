@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.CircleThemeMybatisDao">
+
+	<resultMap id="RM_CircleTheme" type="com.oba.entity.CircleTheme">
+        <result property="id" column="id"/>
+        <result property="circleId" column="circle_id"/>
+        <result property="themeName" column="theme_name"/>
+        <result property="themeContent" column="theme_content"/>
+        <result property="createUserid" column="create_userid"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isHot" column="is_hot"/>
+        <result property="sort" column="sort"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="CircleTheme_columns">
+		id,circle_id,theme_name,theme_content,create_userid,create_time,is_hot,sort
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO circle_theme (
+        	id ,
+        	circle_id ,
+        	theme_name ,
+        	theme_content ,
+        	create_userid ,
+        	create_time ,
+        	is_hot ,
+        	sort 
+        ) VALUES (	
+        	#{id} ,
+        	#{circleId} ,
+        	#{themeName} ,
+        	#{themeContent} ,
+        	#{createUserid} ,
+        	#{createTime} ,
+        	#{isHot} ,
+        	#{sort} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE circle_theme 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(circleId)">circle_id = #{circleId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(themeName)">theme_name = #{themeName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(themeContent)">theme_content = #{themeContent} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createUserid)">create_userid = #{createUserid} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(isHot)">is_hot = #{isHot} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(sort)">sort = #{sort} </if>
+		</set>
+        WHERE 
+	        id = #{id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM circle_theme WHERE
+        id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  circle_theme  WHERE
+        id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_CircleTheme">
+		SELECT <include refid="CircleTheme_columns" />
+		FROM circle_theme WHERE 
+		id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(id) FROM circle_theme 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_CircleTheme">
+        SELECT <include refid="CircleTheme_columns" /> 
+		FROM circle_theme 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="CircleTheme_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(circleId)">
+				AND circle_id = #{circleId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(themeName)">
+				AND theme_name = #{themeName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(themeContent)">
+				AND theme_content = #{themeContent}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createUserid)">
+				AND create_userid = #{createUserid}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(isHot)">
+				AND is_hot = #{isHot}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(sort)">
+				AND sort = #{sort}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(id) FROM circle_theme 
+		<include refid="CircleTheme_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_CircleTheme">
+    	SELECT <include refid="CircleTheme_columns" />
+	    FROM circle_theme 
+		<include refid="CircleTheme_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.Categorylv1MybatisDao">
+
+	<resultMap id="RM_Categorylv1" type="com.oba.entity.Categorylv1">
+        <result property="categorylv1Id" column="categorylv1_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="city" column="city"/>
+        <result property="status" column="status"/>
+        <result property="imgType" column="img_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Categorylv1_columns">
+		categorylv1_id,category_name,city,status,img_type,create_time,remark
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO categorylv1 (
+        	categorylv1_id ,
+        	category_name ,
+        	city ,
+        	status ,
+        	img_type ,
+        	create_time ,
+        	remark 
+        ) VALUES (	
+        	#{categorylv1Id} ,
+        	#{categoryName} ,
+        	#{city} ,
+        	#{status} ,
+        	#{imgType} ,
+        	#{createTime} ,
+        	#{remark} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE categorylv1 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(categoryName)">category_name = #{categoryName} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">city = #{city} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">status = #{status} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(imgType)">img_type = #{imgType} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">remark = #{remark} </if>
+		</set>
+        WHERE 
+	        categorylv1_id = #{categorylv1Id} 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM categorylv1 WHERE
+        categorylv1_id = #{id} 
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  categorylv1  WHERE
+        categorylv1_id IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_Categorylv1">
+		SELECT <include refid="Categorylv1_columns" />
+		FROM categorylv1 WHERE 
+		categorylv1_id = #{id} 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count(categorylv1_id) FROM categorylv1 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_Categorylv1">
+        SELECT <include refid="Categorylv1_columns" /> 
+		FROM categorylv1 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="Categorylv1_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(categorylv1Id)">
+				AND categorylv1_id = #{categorylv1Id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(categoryName)">
+				AND category_name = #{categoryName}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(city)">
+				AND city = #{city}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(status)">
+				AND status = #{status}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(imgType)">
+				AND img_type = #{imgType}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(remark)">
+				AND remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count(categorylv1_id) FROM categorylv1 
+		<include refid="Categorylv1_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_Categorylv1">
+    	SELECT <include refid="Categorylv1_columns" />
+	    FROM categorylv1 
+		<include refid="Categorylv1_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

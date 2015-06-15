@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.oba.mybatis.SecondCommentMybatisDao">
+
+	<resultMap id="RM_SecondComment" type="com.oba.entity.SecondComment">
+        <result property="id" column="id"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nick" column="nick"/>
+        <result property="headerpic" column="headerpic"/>
+        <result property="comment" column="comment"/>
+        <result property="createTime" column="create_time"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="SecondComment_columns">
+		id,comment_id,user_id,nick,headerpic,comment,create_time
+	</sql>
+	
+	<!-- 添加 -->
+	<insert id="save">
+        INSERT INTO second_comment (
+        	id ,
+        	comment_id ,
+        	user_id ,
+        	nick ,
+        	headerpic ,
+        	comment ,
+        	create_time 
+        ) VALUES (	
+        	#{id} ,
+        	#{commentId} ,
+        	#{userId} ,
+        	#{nick} ,
+        	#{headerpic} ,
+        	#{comment} ,
+        	#{createTime} 
+        )
+	</insert>
+    
+	<!-- 修改 -->
+	<update id="update" >
+        UPDATE second_comment 
+		<set>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">id = #{id} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(commentId)">comment_id = #{commentId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">user_id = #{userId} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(nick)">nick = #{nick} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(headerpic)">headerpic = #{headerpic} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(comment)">comment = #{comment} ,</if>
+			<if test="@com.oba.mybatis.Ognl@isNotEmpty(createTime)">create_time = #{createTime} </if>
+		</set>
+        WHERE 
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+		DELETE FROM second_comment WHERE
+    </delete>
+	
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM  second_comment  WHERE
+         IN 
+        <foreach item="item" collection="idsList" open="(" separator="," close=")">
+#{item}		</foreach>  
+    </delete>
+    
+	<!-- 根据主键获取对象 -->
+    <select id="getByID" resultMap="RM_SecondComment">
+		SELECT <include refid="SecondComment_columns" />
+		FROM second_comment WHERE 
+	</select>
+	
+	<!-- 获取总条数 -->
+	<select id="countAll" resultType="int">
+        SELECT count() FROM second_comment 
+    </select>
+	
+	<!-- 获取所有 -->
+	<select id="findAll" resultMap="RM_SecondComment">
+        SELECT <include refid="SecondComment_columns" /> 
+		FROM second_comment 
+    </select>
+	
+	<!-- 提取公共WHERE -->
+	<sql id="SecondComment_where">
+		<where>
+			 
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(commentId)">
+				AND comment_id = #{commentId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(userId)">
+				AND user_id = #{userId}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(nick)">
+				AND nick = #{nick}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(headerpic)">
+				AND headerpic = #{headerpic}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(comment)">
+				AND comment = #{comment}
+			</if>
+	       <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeBegin)">
+				AND create_time >= #{createTimeBegin}
+		   </if>
+		   <if test="@com.oba.mybatis.Ognl@isNotEmpty(createTimeEnd)">
+				AND create_time &lt;= #{createTimeEnd}
+		   </if>
+		</where>
+	</sql>
+	
+	<!-- 根据条件获取条数 -->
+    <select id="findNumberByCondition" resultType="int">
+        SELECT count() FROM second_comment 
+		<include refid="SecondComment_where"/>    
+    </select>
+    
+	<!-- 根据条件获取集合 -->
+    <select id="findPageBreakByCondition" resultMap="RM_SecondComment">
+    	SELECT <include refid="SecondComment_columns" />
+	    FROM second_comment 
+		<include refid="SecondComment_where"/>
+		
+		<if test="@com.oba.mybatis.Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+
